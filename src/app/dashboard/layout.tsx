@@ -1,4 +1,3 @@
-import Link from "next/link";
 import LogoutButton from "./LogoutButton";
 import { NavItem } from "./SidebarNav";
 
@@ -8,30 +7,30 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen bg-white">
-      {/* Sidebar — Pure white, sharp border */}
-      <aside className="flex w-60 flex-col border-r border-gray-200 bg-white">
+    <div className="flex min-h-screen bg-white dark:bg-zinc-950">
+      {/* Sidebar */}
+      <aside className="flex w-60 flex-col border-r border-gray-200 bg-white dark:border-zinc-800 dark:bg-zinc-950">
         {/* Logo */}
-        <div className="flex items-center gap-2.5 border-b border-gray-100 px-6 py-[18px]">
-          <div className="flex h-7 w-7 items-center justify-center rounded-md bg-black">
+        <div className="flex items-center gap-2.5 border-b border-gray-100 px-6 py-[18px] dark:border-zinc-800">
+          <div className="flex h-7 w-7 items-center justify-center rounded-md bg-black dark:bg-white">
             <svg
               viewBox="0 0 24 24"
               fill="none"
-              stroke="white"
+              stroke="currentColor"
               strokeWidth="2.5"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="h-4 w-4"
+              className="h-4 w-4 text-white dark:text-zinc-950"
             >
               <path d="M20.2 7.8l-7.7 7.7-4-4-5.7 5.7" />
               <path d="M15 7h6v6" />
             </svg>
           </div>
           <div>
-            <span className="text-sm font-bold tracking-tight text-gray-900">
+            <span className="text-sm font-bold tracking-tight text-gray-900 dark:text-zinc-100">
               Attention
             </span>
-            <span className="ml-1 rounded-md bg-black px-1.5 py-0.5 text-[10px] font-semibold text-white">
+            <span className="ml-1 rounded-md bg-black px-1.5 py-0.5 text-[10px] font-semibold text-white dark:bg-white dark:text-zinc-950">
               Token
             </span>
           </div>
@@ -100,13 +99,15 @@ export default function DashboardLayout({
         </nav>
 
         {/* Footer */}
-        <div className="border-t border-gray-100 px-3 py-3">
+        <div className="border-t border-gray-100 px-3 py-3 dark:border-zinc-800">
           <LogoutButton />
         </div>
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 overflow-y-auto bg-white">{children}</main>
+      <main className="flex-1 overflow-y-auto bg-white dark:bg-zinc-950">
+        {children}
+      </main>
     </div>
   );
 }

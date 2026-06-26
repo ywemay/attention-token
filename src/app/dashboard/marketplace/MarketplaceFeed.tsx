@@ -66,7 +66,7 @@ const DUMMY_TASKS = [
 
 const TASK_STYLES: Record<
   string,
-  { label: string; icon: string; bg: string; text: string; dot: string }
+  { label: string; icon: string; bg: string; text: string; dot: string; darkBg: string; darkText: string; darkDot: string }
 > = {
   subscribe: {
     label: "Subscribe",
@@ -74,6 +74,9 @@ const TASK_STYLES: Record<
     bg: "bg-blue-50",
     text: "text-blue-700",
     dot: "bg-blue-500",
+    darkBg: "dark:bg-blue-950/40",
+    darkText: "dark:text-blue-300",
+    darkDot: "dark:bg-blue-400",
   },
   comment: {
     label: "Comment",
@@ -81,6 +84,9 @@ const TASK_STYLES: Record<
     bg: "bg-purple-50",
     text: "text-purple-700",
     dot: "bg-purple-500",
+    darkBg: "dark:bg-purple-950/40",
+    darkText: "dark:text-purple-300",
+    darkDot: "dark:bg-purple-400",
   },
   blog_post: {
     label: "Blog Post",
@@ -88,6 +94,9 @@ const TASK_STYLES: Record<
     bg: "bg-orange-50",
     text: "text-orange-700",
     dot: "bg-orange-500",
+    darkBg: "dark:bg-orange-950/40",
+    darkText: "dark:text-orange-300",
+    darkDot: "dark:bg-orange-400",
   },
 };
 
@@ -103,22 +112,24 @@ export default function MarketplaceFeed() {
     <div className="p-8">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-bold">Attention Marketplace</h1>
-        <p className="mt-1 text-sm text-gray-500">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-zinc-100">
+          Attention Marketplace
+        </h1>
+        <p className="mt-1 text-sm text-gray-500 dark:text-zinc-400">
           Earn ATTN tokens by giving creators the attention they deserve.
         </p>
       </div>
 
-      {/* Task type filter pills */}
+      {/* Filter pills */}
       <div className="mb-6 flex flex-wrap gap-2">
         {["all", "subscribe", "comment", "blog_post"].map((type) => (
           <button
             key={type}
             onClick={() => setFilter(type)}
-            className={`rounded-full border px-4 py-1.5 text-xs font-medium transition hover:bg-gray-50 ${
+            className={`rounded-full border px-4 py-1.5 text-xs font-medium transition ${
               filter === type
-                ? "border-gray-900 bg-gray-900 text-white hover:bg-gray-800"
-                : "text-gray-600"
+                ? "border-gray-900 bg-gray-900 text-white dark:border-zinc-100 dark:bg-zinc-100 dark:text-zinc-900"
+                : "border-gray-200 text-gray-600 hover:bg-gray-50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
             }`}
           >
             {type === "all"
@@ -131,33 +142,33 @@ export default function MarketplaceFeed() {
       {/* Task list */}
       <div className="space-y-4">
         {filteredTasks.map((task) => {
-          const style = TASK_STYLES[task.task_type];
+          const s = TASK_STYLES[task.task_type];
           return (
             <div
               key={task.id}
-              className="flex items-center gap-5 rounded-xl border bg-white p-5 shadow-sm transition hover:shadow-md"
+              className="flex items-center gap-5 rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700"
             >
               {/* Task type badge */}
               <div
-                className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-xl text-2xl ${style.bg}`}
+                className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-xl text-2xl ${s.bg} ${s.darkBg}`}
               >
-                {style.icon}
+                {s.icon}
               </div>
 
               {/* Info */}
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
                   <span
-                    className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold ${style.bg} ${style.text}`}
+                    className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold ${s.bg} ${s.text} ${s.darkBg} ${s.darkText}`}
                   >
-                    <span className={`h-1.5 w-1.5 rounded-full ${style.dot}`} />
-                    {style.label}
+                    <span className={`h-1.5 w-1.5 rounded-full ${s.dot} ${s.darkDot}`} />
+                    {s.label}
                   </span>
-                  <span className="text-xs text-gray-400">
+                  <span className="text-xs text-gray-400 dark:text-zinc-500">
                     {task.platform}
                   </span>
                 </div>
-                <p className="mt-1.5 text-sm font-medium text-gray-900">
+                <p className="mt-1.5 text-sm font-medium text-gray-900 dark:text-zinc-200">
                   <span className="font-semibold">{task.creator}</span>
                   {" — "}
                   {task.instructions}
@@ -166,12 +177,12 @@ export default function MarketplaceFeed() {
 
               {/* Reward + CTA */}
               <div className="shrink-0 text-right">
-                <span className="inline-block rounded-full bg-yellow-50 px-3 py-1 text-sm font-bold text-yellow-700">
+                <span className="inline-block rounded-full bg-yellow-50 px-3 py-1 text-sm font-bold text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400">
                   {task.reward_amount} ATTN
                 </span>
                 <Link
                   href={`/dashboard/marketplace/${task.id}`}
-                  className="mt-2 block w-full rounded-lg bg-black px-4 py-1.5 text-center text-xs font-medium text-white transition hover:bg-gray-800"
+                  className="mt-2 block w-full rounded-lg bg-black px-4 py-1.5 text-center text-xs font-medium text-white transition hover:bg-gray-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
                 >
                   Start Task
                 </Link>

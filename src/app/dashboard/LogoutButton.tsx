@@ -15,7 +15,7 @@ export default function LogoutButton() {
   return (
     <button
       onClick={handleLogout}
-      className="flex w-full items-center gap-3 rounded-md px-3 py-[10px] text-sm font-medium text-gray-500 transition hover:bg-red-50 hover:text-red-600"
+      className="flex w-full items-center gap-3 rounded-md px-3 py-[10px] text-sm font-medium text-gray-500 transition hover:bg-red-50 hover:text-red-600 dark:text-zinc-500 dark:hover:bg-red-950/40 dark:hover:text-red-400"
     >
       <svg
         viewBox="0 0 24 24"
