@@ -21,20 +21,24 @@ export function NavItem({
   return (
     <Link
       href={href}
-      className={`flex items-center gap-3 rounded-md px-3 py-[10px] text-sm font-medium transition ${
-        isActive
-          ? "bg-gray-100 text-gray-900"
-          : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
-      }`}
+      className={
+        `flex items-center gap-3 rounded-md px-3 py-[10px] text-sm font-semibold transition-all duration-150 ` +
+        (isActive
+          ? "bg-blue-50 text-blue-700"
+          : "text-gray-600 hover:bg-gray-100 hover:text-gray-900")
+      }
     >
       <span
-        className={`shrink-0 ${
-          isActive ? "text-gray-900" : "text-gray-400"
+        className={`shrink-0 transition-colors duration-150 ${
+          isActive
+            ? "text-blue-600"
+            : "text-gray-400 group-hover:text-gray-600"
         }`}
       >
         {icon}
       </span>
-      {label}
+
+      <span>{label}</span>
     </Link>
   );
 }

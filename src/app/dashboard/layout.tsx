@@ -8,11 +8,11 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen">
-      {/* Sidebar */}
-      <aside className="flex w-60 flex-col border-r bg-gray-50/80">
+    <div className="flex min-h-screen bg-white">
+      {/* Sidebar — Pure white, sharp border */}
+      <aside className="flex w-60 flex-col border-r border-gray-200 bg-white">
         {/* Logo */}
-        <div className="flex items-center gap-2 border-b px-6 py-[18px]">
+        <div className="flex items-center gap-2.5 border-b border-gray-100 px-6 py-[18px]">
           <div className="flex h-7 w-7 items-center justify-center rounded-md bg-black">
             <svg
               viewBox="0 0 24 24"
@@ -28,7 +28,9 @@ export default function DashboardLayout({
             </svg>
           </div>
           <div>
-            <span className="text-sm font-bold tracking-tight">Attention</span>
+            <span className="text-sm font-bold tracking-tight text-gray-900">
+              Attention
+            </span>
             <span className="ml-1 rounded-md bg-black px-1.5 py-0.5 text-[10px] font-semibold text-white">
               Token
             </span>
@@ -36,7 +38,7 @@ export default function DashboardLayout({
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 space-y-0.5 px-3 py-3">
+        <nav className="flex-1 space-y-0.5 px-3 py-4">
           <NavItem
             href="/dashboard"
             label="Marketplace"
@@ -98,7 +100,7 @@ export default function DashboardLayout({
         </nav>
 
         {/* Footer */}
-        <div className="border-t px-3 py-3">
+        <div className="border-t border-gray-100 px-3 py-3">
           <LogoutButton />
         </div>
       </aside>
