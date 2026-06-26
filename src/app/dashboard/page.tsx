@@ -1,7 +1,7 @@
 export const dynamic = "force-dynamic";
 
-import DashboardClient from "./DashboardClient";
+import MarketplacePage from "./marketplace/MarketplaceFeed";
 
 export default function DashboardPage() {
-  return <DashboardClient />;
+  return <MarketplacePage />;
 }
