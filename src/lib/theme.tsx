@@ -6,13 +6,14 @@ import {
   useEffect,
   useState,
   useCallback,
+  useMemo,
 } from "react";
 
 type Theme = "light" | "dark";
 
 interface ThemeCtx {
   theme: Theme;
-  resolved: Theme; // actual applied theme (system + manual override resolved)
+  resolved: Theme;
   toggle: () => void;
   setTheme: (t: Theme) => void;
 }
@@ -26,38 +27,42 @@ const ThemeContext = createContext<ThemeCtx>({
 
 const STORAGE_KEY = "attention-token-theme";
 
+function getInitialTheme(): Theme {
+  if (typeof window === "undefined") return "light";
+  const stored = localStorage.getItem(STORAGE_KEY);
+  if (stored === "dark" || stored === "light") return stored;
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+}
+
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>("light");
-  const [systemDark, setSystemDark] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const [theme, setThemeState] = useState<Theme>(getInitialTheme);
 
-  // Read stored preference + system preference on mount
+  // Sync .dark class to DOM whenever theme changes
   useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY) as Theme | null;
-    if (stored === "light" || stored === "dark") {
-      setThemeState(stored);
+    const classList = document.documentElement.classList;
+    if (theme === "dark") {
+      classList.add("dark");
+    } else {
+      classList.remove("dark");
     }
+  }, [theme]);
 
+  // Listen for OS dark mode changes (only when no stored override)
+  useEffect(() => {
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
-    setSystemDark(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setSystemDark(e.matches);
+    const handler = (e: MediaQueryListEvent) => {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (!stored) {
+        setThemeState(e.matches ? "dark" : "light");
+      }
+    };
     mq.addEventListener("change", handler);
-    setMounted(true);
     return () => mq.removeEventListener("change", handler);
   }, []);
 
-  // Apply .dark class to <html>
-  const resolved = theme === "dark" || (theme !== "light" && systemDark)
-    ? "dark"
-    : "light";
-
-  useEffect(() => {
-    if (resolved === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [resolved]);
+  const resolved = theme;
 
   const setTheme = useCallback((t: Theme) => {
     setThemeState(t);
@@ -65,22 +70,17 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const toggle = useCallback(() => {
-    setTheme(resolved === "dark" ? "light" : "dark");
+    const next = resolved === "dark" ? "light" : "dark";
+    setTheme(next);
   }, [resolved, setTheme]);
 
-  // Prevent flash of wrong theme
-  if (!mounted) {
-    return (
-      <div style={{ visibility: "hidden" }}>
-        {children}
-      </div>
-    );
-  }
+  const value = useMemo(
+    () => ({ theme, resolved, toggle, setTheme }),
+    [theme, resolved, toggle, setTheme]
+  );
 
   return (
-    <ThemeContext.Provider value={{ theme, resolved, toggle, setTheme }}>
-      {children}
-    </ThemeContext.Provider>
+    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
   );
 }
 
